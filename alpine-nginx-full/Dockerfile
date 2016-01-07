@@ -5,6 +5,8 @@ MAINTAINER Sven Dowideit <SvenDowideit@home.org.au>
 
 ENV NGINX_VERSION nginx-1.9.9
 
+# Add subs_module as per https://packages.debian.org/nginx-full
+
 RUN apk --update add openssl-dev pcre-dev zlib-dev wget build-base && \
     mkdir -p /tmp/src && \
     cd /tmp/src && \

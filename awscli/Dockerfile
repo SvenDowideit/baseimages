@@ -1,5 +1,6 @@
 FROM alpine:latest
-MAINTAINER Jessica Frazelle <jess@docker.com>
+# MAINTAINER Jessica Frazelle <jess@docker.com>
+MAINTAINER Sven Dowideit <SvenDowideit@home.org.au>
 
 RUN apk update && apk add \
 	ca-certificates \
@@ -8,14 +9,6 @@ RUN apk update && apk add \
 	python \
 	py-pip \
 	&& rm -rf /var/cache/apk/* \
-	&& pip install awscli \
-	&& mkdir -p /root/.aws \
-	&& { \
-		echo '[default]'; \
-		echo 'output = json'; \
-		echo 'region = $AMAZON_REGION'; \
-		echo 'aws_access_key_id = $AMAZON_ACCESS_KEY_ID'; \
-		echo 'aws_secret_access_key = $AMAZON_SECRET_ACCESS_KEY'; \
-	} > /root/.aws/config
+	&& pip install awscli
 
 ENTRYPOINT [ "aws" ]
