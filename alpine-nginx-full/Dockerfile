@@ -1,8 +1,9 @@
-FROM alpine:3.1
+FROM alpine
 
-MAINTAINER John Allen <john.allen@connexiolabs.com>
+MAINTAINER Sven Dowideit <SvenDowideit@home.org.au>
+# MAINTAINER John Allen <john.allen@connexiolabs.com>
 
-ENV NGINX_VERSION nginx-1.7.11
+ENV NGINX_VERSION nginx-1.9.9
 
 RUN apk --update add openssl-dev pcre-dev zlib-dev wget build-base && \
     mkdir -p /tmp/src && \
@@ -24,9 +25,12 @@ RUN apk --update add openssl-dev pcre-dev zlib-dev wget build-base && \
     rm -rf /var/cache/apk/*
 
 # forward request and error logs to docker log collector
-RUN ln -sf /dev/stdout /var/log/nginx/access.log
-RUN ln -sf /dev/stderr /var/log/nginx/error.log
+RUN ln -sf /dev/stdout /var/log/nginx/access.log \
+	&& ln -sf /dev/stderr /var/log/nginx/error.log
 
+# Improves performance by declaring an explicit volume that bypasses docker's copy-on-write backend (e.g. aufs)
+# and bind-mounts the data directly from the host filesystem.
+VOLUME ["/var/cache/nginx"]
 VOLUME ["/var/log/nginx"]
 
 WORKDIR /etc/nginx
